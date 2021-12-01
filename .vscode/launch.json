@@ -1,0 +1,46 @@
+{
+  // Use IntelliSense para saber los atributos posibles.
+  // Mantenga el puntero para ver las descripciones de los existentes atributos.
+  // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Deno",
+      "request": "launch",
+      "type": "pwa-node",
+      "program": "./src/cli/mod.ts",
+      "runtimeExecutable": "deno",
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": [
+        "run",
+        "--unstable",
+        "--inspect-brk",
+        "--allow-all",
+      ],
+      "args": [
+        "run",
+        "-d24",
+        "-p1",
+        "--sample",
+        // "--file=src/solutions/day10/sample_1.txt"
+      ],
+      "attachSimplePort": 9229,
+      "outputCapture": "std"
+    },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Launch Deno Test",
+      "program": "${workspaceFolder}/src/solutions/day18/partTwo/test.ts",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "deno",
+      "runtimeArgs": [
+        "test",
+        "--inspect-brk=127.0.0.1:9229",
+        "--allow-all",
+        // "--filter \"Day 18\""
+      ],
+      "attachSimplePort": 9229
+    },
+  ]
+}
