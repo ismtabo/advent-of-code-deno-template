@@ -1,5 +1,4 @@
-import { existsSync } from "https://deno.land/std/fs/mod.ts";
-import { dirname, join } from "https://deno.land/std/path/mod.ts";
+import { dirname, join } from "https://deno.land/std@0.166.0/path/mod.ts";
 import { Solution, Solutions } from "./types.d.ts";
 import { dayKey, extractDayNumber } from "./utils.ts";
 
@@ -18,33 +17,42 @@ export async function listDays() {
 export function readDaySampleInput(day: number) {
   const dayName = dayKey(day);
   const daySampleInput = join(SOLUTIONS_PATH, dayName, "sample.txt");
-  if (!existsSync(daySampleInput)) {
-    console.error(`Day ${day} sample input not found`);
-    Deno.exit(1);
+  try {
+    return Deno.readTextFileSync(daySampleInput);
+  } catch (error) {
+    if (error instanceof Deno.errors.NotFound) {
+      throw new Error(`Day ${day} sample input not found`, error);
+    }
+    throw error;
   }
-  return Deno.readTextFileSync(daySampleInput);
 }
 
-export function readDayInput(day: number) {
+export function readDayInput(day: number): string {
   const dayName = dayKey(day);
   const daySampleInput = join(SOLUTIONS_PATH, dayName, "input.txt");
-  if (!existsSync(daySampleInput)) {
-    console.error(`Day ${day} input not found`);
-    Deno.exit(1);
+  try {
+    return Deno.readTextFileSync(daySampleInput);
+  } catch (error) {
+    if (error instanceof Deno.errors.NotFound) {
+      throw Error(`Day ${day} input not found`, error);
+    }
+    throw error;
   }
-  return Deno.readTextFileSync(daySampleInput);
 }
 
-export async function loadSolutionsModules(): Promise<Solutions> {
+export function loadSolutionsModules(): Promise<Solutions> {
   return import(SOLUTIONS_MODULE);
 }
 
 export async function loadModule(day: number): Promise<Solution> {
   const dayName = dayKey(day);
   const dayModule = join(SOLUTIONS_PATH, dayName, "mod.ts");
-  if (!existsSync(dayModule)) {
-    console.error(`Day ${day} module not found`);
-    Deno.exit(1);
+  try {
+    return await import(dayModule);
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(`Day ${day} module not found`, error);
+    }
+    throw error;
   }
-  return await import(dayModule);
 }

@@ -5,13 +5,7 @@ import {
   readDaySampleInput,
 } from "./load.ts";
 import { log } from "./log.ts";
-import {
-  Result,
-  ResultDay,
-  RunOptions,
-  Solution,
-  SolutionPart,
-} from "./types.d.ts";
+import { Result, ResultDay, RunOptions, Solution } from "./types.d.ts";
 import { dayKey, extractDayNumber } from "./utils.ts";
 
 function runWithTime<T>(fn: () => Result<T>): Result<T> {
@@ -19,16 +13,6 @@ function runWithTime<T>(fn: () => Result<T>): Result<T> {
   const result = fn();
   const time = performance.now() - startTime;
   return { ...result, time };
-}
-
-function runPart<Input, Output>(
-  part: SolutionPart<Input, Output>,
-  input: Input,
-  { time: time = false }: Pick<RunOptions, "time">,
-): Result<Output> {
-  return !time
-    ? { result: part(input) }
-    : runWithTime(() => ({ result: part(input) }));
 }
 
 function runModule(
@@ -42,7 +26,7 @@ function runModule(
   const moduleFn = sampleExtraArgs
     ? () => module.main(text, part === 2, sampleExtraArgs)
     : () => module.main(text, part === 2);
-  return !time
+  return time !== true
     ? { result: moduleFn() }
     : runWithTime(() => ({ result: moduleFn() }));
 }
@@ -59,13 +43,13 @@ function runAllParts(
 
 export async function runDay(
   day: number,
-  file: string,
+  file: string | undefined,
   { part, allParts, time, sample, format }: RunOptions,
 ) {
   const module: Solution = await loadModule(day);
-  const text = file
+  const text = file != null
     ? Deno.readTextFileSync(file)
-    : sample
+    : sample === true
     ? readDaySampleInput(day)
     : readDayInput(day);
   const result = allParts

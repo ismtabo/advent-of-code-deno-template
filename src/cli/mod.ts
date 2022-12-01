@@ -1,26 +1,29 @@
-import { Command } from "https://deno.land/x/cliffy/command/mod.ts";
+import { Command } from "https://deno.land/x/cliffy@v0.25.4/command/mod.ts";
 import { createDay } from "./create.ts";
 import { runAllDays, runDay } from "./run.ts";
+import { Format } from "./types.d.ts";
+import { isFormat } from "./utils.ts";
 
 try {
   await new Command()
     .name("aoc")
-    .version("<version>")
+    .version("0.1.1")
     .description("Solutions for Advent of Code. https://adventofcode.com/")
     .throwErrors()
     .command(
       "run",
       new Command()
         .description("Run day solution")
-        .option("-d, --day <day:number>", "Day to run")
+        .option("-d, --day <day:number>", "Day to run", { required: true })
         .option(
           "-p, --part <part:number>",
           "Part of the day solution to run.",
-          { default: 1 },
+          { required: true },
         )
         .option(
           "-a, --all-parts",
           "Execute both parts. If present part option will be ignore.",
+          { conflicts: ["part"] },
         )
         .option("-t, --time", "Show spent time")
         .option(
@@ -37,8 +40,8 @@ try {
           "Output format.",
           {
             default: "plain",
-            value(value: string) {
-              if (!["plain", "json", "csv"].includes(value)) {
+            value(value: string): Format {
+              if (!isFormat(value)) {
                 throw new Error(
                   `Format must be one of plain, json or csv but got: ${value}`,
                 );
@@ -48,7 +51,11 @@ try {
           },
         )
         .action(({ day, part, allParts, time, sample, format, file }) =>
-          runDay(day, file, { part, allParts, time, sample, format })
+          runDay(
+            day,
+            file,
+            { part, allParts, time, sample, format },
+          )
         ),
     )
     .command(
@@ -62,7 +69,8 @@ try {
         )
         .option(
           "-a, --all-parts",
-          "Execute both parts. If present part option will be ignore.",
+          "Execute both parts. If present 'part' option will be ignore.",
+          { conflicts: ["part"] },
         )
         .option("-t, --time", "Show spent time")
         .option(
@@ -74,13 +82,13 @@ try {
           "Output format.",
           {
             default: "plain",
-            value(value: string) {
-              if (!["plain", "json", "csv"].includes(value)) {
-                throw new Error(
-                  `Format must be one of plain, json or csv but got: ${value}`,
-                );
+            value(value: string): Format {
+              if (isFormat(value)) {
+                return value;
               }
-              return value;
+              throw new Error(
+                `Format must be one of plain, json or csv but got: ${value}`,
+              );
             },
           },
         )
@@ -92,7 +100,7 @@ try {
         .description("Create new day solution folder skeleton")
         .option(
           "-d, --day <day:number>",
-          "Day of the solution. By default the corresponding next day will be created.",
+          "Day of the solution. If omit the corresponding next day will be created.",
         )
         .action(({ day }) => createDay(day)),
     )

@@ -1,4 +1,4 @@
-import { Result, ResultDay, ResultsDays } from "./types.d.ts";
+import { Format, Result, ResultDay, ResultsDays } from "./types.d.ts";
 
 export function isResult(obj: Result | ResultDay | ResultsDays): obj is Result {
   return typeof obj === "object" && "result" in obj;
@@ -23,4 +23,11 @@ export function extractDayNumber(day: string) {
 
 export function dayKey(day: number) {
   return `day${day}`;
+}
+
+export function isFormat(value: string | null): value is Format {
+  if (value == null) {
+    return false;
+  }
+  return ["plain", "json", "csv"].includes(value);
 }

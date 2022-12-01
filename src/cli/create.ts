@@ -1,11 +1,11 @@
-import { ensureDirSync, exists } from "https://deno.land/std/fs/mod.ts";
-import { dirname, join } from "https://deno.land/std/path/mod.ts";
+import { ensureDirSync } from "https://deno.land/std@0.166.0/fs/mod.ts";
+import { dirname, join } from "https://deno.land/std@0.166.0/path/mod.ts";
 import { renderFileToString } from "https://deno.land/x/dejs@0.9.3/mod.ts";
 import { listDays, SOLUTIONS_MODULE, SOLUTIONS_PATH } from "./load.ts";
 
 const __dirname = dirname(new URL(import.meta.url).pathname);
 
-export async function createDay(day: number) {
+export async function createDay(day: number | undefined) {
   if (day == null) {
     const days = await listDays();
     day = 1;
@@ -16,12 +16,14 @@ export async function createDay(day: number) {
 
   const mainFolder = join(SOLUTIONS_PATH, `day${day}`);
 
-  if (await exists(mainFolder)) {
-    console.error(`Error - Day ${day} already exists`);
-    Deno.exit(1);
+  try {
+    Deno.mkdirSync(mainFolder);
+  } catch (error) {
+    if (error instanceof Deno.errors.AlreadyExists) {
+      throw new Error(`Error - Day ${day} already exists`, error);
+    }
+    throw error;
   }
-
-  ensureDirSync(mainFolder);
 
   Deno.writeTextFileSync(
     join(mainFolder, "mod.ts"),
