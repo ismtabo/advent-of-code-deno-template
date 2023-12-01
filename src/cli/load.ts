@@ -1,4 +1,5 @@
-import { join } from "https://deno.land/std@0.166.0/path/mod.ts";
+import { join } from "https://deno.land/std@0.208.0/path/mod.ts";
+import { toFileUrl } from "https://deno.land/std@0.208.0/path/to_file_url.ts";
 import { Solution, Solutions } from "./types.d.ts";
 import { dayKey, extractDayNumber } from "./utils.ts";
 
@@ -47,7 +48,7 @@ export async function loadModule(day: number): Promise<Solution> {
   const dayName = dayKey(day);
   const dayModule = join(SOLUTIONS_PATH, dayName, "mod.ts");
   try {
-    return await import(dayModule);
+    return await import(toFileUrl(dayModule).toString());
   } catch (error) {
     if (error instanceof TypeError) {
       throw new Error(`Day ${day} module not found`, error);
