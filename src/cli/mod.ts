@@ -3,7 +3,7 @@ import { createDay } from "./create.ts";
 import { runAllDays, runDay } from "./run.ts";
 import { Format } from "./types.d.ts";
 import { isFormat } from "./utils.ts";
-import { getInput } from "./get_input.ts";
+import { getDescription, getInput } from "./get_input.ts";
 import { submitAnswer } from "./submit.ts";
 
 try {
@@ -122,6 +122,24 @@ try {
         )
         .action(({ day, cookie }) => {
           return getInput(day, cookie);
+        }),
+    )
+    .command(
+      "get-desc",
+      new Command()
+        .description("Get description for a given day")
+        .option(
+          "-d, --day <day:number>",
+          "Day of the solution.",
+          { required: true },
+        )
+        .option(
+          "-c, --cookie <cookie:string>",
+          "Cookie to authenticate in Advent of Code.",
+          { required: true },
+        )
+        .action(({ day, cookie }) => {
+          return getDescription(day, cookie);
         }),
     )
     .command(

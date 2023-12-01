@@ -41,6 +41,7 @@ $ aoc -h
     run-all    - Run multiple day solution
     new        - Create new day solution folder skeleton
     get-input  - Get input for a given day
+    get-desc   - Get description for a given day
     submit     - Submit answer for a given day
 ```
 
