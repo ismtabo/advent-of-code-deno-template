@@ -1,3 +1,7 @@
+import {
+  DOMParser,
+} from "https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts";
+
 export async function submitAnswer(
   day: number,
   part: number,
@@ -21,5 +25,12 @@ export async function submitAnswer(
   }
 
   const result = await response.text();
-  return result;
+  const doc = new DOMParser().parseFromString(result, "text/html")!;
+  const article = doc.querySelector("article p")!;
+  const resultText = article.textContent?.trim().replace("\n", "").replace(
+    /\s+/g,
+    " ",
+  );
+  console.log(resultText);
+  return resultText;
 }
