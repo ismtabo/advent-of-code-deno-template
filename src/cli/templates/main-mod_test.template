@@ -1,0 +1,15 @@
+import { partOne, partTwo, preprocess } from "./mod.ts";
+import { assertEquals } from "https://deno.land/std@0.208.0/assert/mod.ts";
+
+const sample_input = await Deno.readTextFile("./day<%= day %>/sample.txt");
+
+const SAMPLE_ANSWER_ONE = 0;
+const SAMPLE_ANSWER_TWO = 0;
+
+Deno.test("day <%= day %> part 1", () => {
+  assertEquals(partOne(preprocess(sample_input)), SAMPLE_ANSWER_ONE);
+});
+
+Deno.test("day <%= day %> part 2", () => {
+  assertEquals(partTwo(preprocess(sample_input)), SAMPLE_ANSWER_TWO);
+});

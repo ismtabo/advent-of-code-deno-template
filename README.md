@@ -1,20 +1,27 @@
 # Advent of code Deno Template
 
-Template repository of solutions for the [Advent of Code][4] done by [ismtabo][1].
-Create a new repository based on this template to use Deno in your Advent of Code solutions.
+Template repository of solutions for the [Advent of Code][4] done by
+[ismtabo][1]. Create a new repository based on this template to use Deno in your
+Advent of Code solutions.
 
 ## Usage
 
 ### Prerequisites
 
-You may need to [install deno][3] to use this repository.
+You need to [install deno][3] to use this repository.
 
 ### CLI tool
+
+You can install the CLI tool by running this command :
+
+```
+$ deno install -A -n aoc src/cli/mod.ts
+```
 
 After installing it you can run the solutions using the cli tool:
 
 ```
-$ deno run -A --unstable src/cli/mod.ts -h
+$ aoc -h
 
   Usage:   aoc
   Version: <version>
@@ -30,10 +37,12 @@ $ deno run -A --unstable src/cli/mod.ts -h
 
   Commands:
 
-    run      - Run day solution
-    run-all  - Run multiple day solution
-    new      - Create new day solution folder skeleton
-
+    run        - Run day solution
+    run-all    - Run multiple day solution
+    new        - Create new day solution folder skeleton
+    get-input  - Get input for a given day
+    get-desc   - Get description for a given day
+    submit     - Submit answer for a given day
 ```
 
 ### Run a day solution
@@ -41,7 +50,7 @@ $ deno run -A --unstable src/cli/mod.ts -h
 The solutions can be run with the `run` sub-command:
 
 ```
-$ deno run -A --unstable src/cli/mod.ts run -h
+$ aoc run -h
 
   Usage:   aoc run
   Version: <version>
@@ -60,13 +69,12 @@ $ deno run -A --unstable src/cli/mod.ts run -h
     -f, --file       <file:string>    - Input file. If missing, the day input file is used instead.
     --sample                          - Run day using sample input instead of day input file.        (conflicts: file)
     --format         <format:string>  - Output format.                                               (Default: "plain")
-
 ```
 
 Also, to run all the solutions you can use `run-all` sub-command:
 
 ```
-$ deno run -A --unstable src/cli/mod.ts run-all -h
+$ aoc run-all -h
 
   Usage:   aoc run-all
   Version: <version>
@@ -83,36 +91,37 @@ $ deno run -A --unstable src/cli/mod.ts run-all -h
     -t, --time                        - Show spent time
     --sample                          - Run day using sample input instead of day input file.
     --format         <format:string>  - Output format.                                              (Default: "plain")
-
 ```
 
 ### Test day solutions
 
-Some of the day solutions have unit tests. To run them use [deno built-in test runner][5]:
+Some of the day solutions have unit tests. To run them use
+[deno built-in test runner][5]:
 
 ```
 $ deno test [OPTIONS] [file]
-
 ```
 
 Some of the test need `--allow-read` to read the sample inputs of its day.
 
 ### Bundle AOC solutions
 
-Using [deno built-in bundler][8], you can bundle the problems module into a js module:
+Using [deno built-in bundler][8], you can bundle the problems module into a js
+module:
 
 ```
 $ deno bundle [OPTIONS] <source_file> [out_file]
-
 ```
 
-To bundle the solutions module the `<source_file>` need to be `src/problems/mod.ts`.
+To bundle the solutions module the `<source_file>` need to be
+`src/problems/mod.ts`.
 
 ## Repository content
 
 The source code of the repository is inside the `src` path:
 
 ### Folder
+
 ```
 / src
 ├- app: TBD
@@ -129,7 +138,19 @@ The source code of the repository is inside the `src` path:
 ├- type.d.ts: Types used in the cli tool
 └- [...]: other stuff
 ```
+
 ### Day solution structure
+
+If you installed the CLI tool, you can init a solutions folder anywhere and
+start working inside. Just run `aoc new -d <day>` to create the folder structure
+of the day solution inside your current folder.
+
+Once you've created the day foler, you can automatically retrieve the input by
+launching `aoc get-input -d <day> -c <cookie>`. You can retrieve your session
+cookie on the advent of code website.
+
+When you're happy with your solution, you can then post your answer by running :
+`aoc submit -d <day> -c <cookie> -p <part> -a <answer>`
 
 Each day solution has the following structure:
 
@@ -148,7 +169,9 @@ Each day solution has the following structure:
 └- [...]: other stuff
 ```
 
-The main module exports two functions `main` and `preprocess` to run the solution parts and preprocess the input respectively. Each part module exports a function `partXxx` with its name in addition to other possible issues.
+The main module exports two functions `main` and `preprocess` to run the
+solution parts and preprocess the input respectively. Each part module exports a
+function `partXxx` with its name in addition to other possible issues.
 
 ## Built with
 
@@ -162,7 +185,8 @@ The main module exports two functions `main` and `preprocess` to run the solutio
 
 ## License
 
-This repository is under MIT License - look up [LICENSE](./LICENSE) for more details
+This repository is under MIT License - look up [LICENSE](./LICENSE) for more
+details
 
 [1]: https://github.com/
 [2]: https://deno.land/

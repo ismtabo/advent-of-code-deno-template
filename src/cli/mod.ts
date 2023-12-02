@@ -3,6 +3,8 @@ import { createDay } from "./create.ts";
 import { runAllDays, runDay } from "./run.ts";
 import { Format } from "./types.d.ts";
 import { isFormat } from "./utils.ts";
+import { getDescription, getInput } from "./get_input.ts";
+import { submitAnswer } from "./submit.ts";
 
 try {
   await new Command()
@@ -103,6 +105,70 @@ try {
           "Day of the solution. If omit the corresponding next day will be created.",
         )
         .action(({ day }) => createDay(day)),
+    )
+    .command(
+      "get-input",
+      new Command()
+        .description("Get input for a given day")
+        .option(
+          "-d, --day <day:number>",
+          "Day of the solution.",
+          { required: true },
+        )
+        .option(
+          "-c, --cookie <cookie:string>",
+          "Cookie to authenticate in Advent of Code.",
+          { required: true },
+        )
+        .action(({ day, cookie }) => {
+          return getInput(day, cookie);
+        }),
+    )
+    .command(
+      "get-desc",
+      new Command()
+        .description("Get description for a given day")
+        .option(
+          "-d, --day <day:number>",
+          "Day of the solution.",
+          { required: true },
+        )
+        .option(
+          "-c, --cookie <cookie:string>",
+          "Cookie to authenticate in Advent of Code.",
+          { required: true },
+        )
+        .action(({ day, cookie }) => {
+          return getDescription(day, cookie);
+        }),
+    )
+    .command(
+      "submit",
+      new Command()
+        .description("Submit answer for a given day")
+        .option(
+          "-d, --day <day:number>",
+          "Day of the solution.",
+          { required: true },
+        )
+        .option(
+          "-p, --part <part:number>",
+          "Part of the day solution to run.",
+          { required: true },
+        )
+        .option(
+          "-a, --answer <answer:string>",
+          "Answer to submit.",
+          { required: true },
+        )
+        .option(
+          "-c, --cookie <cookie:string>",
+          "Cookie to authenticate in Advent of Code.",
+          { required: true },
+        )
+        .action(({ day, part, answer, cookie }) => {
+          return submitAnswer(day, part, answer, cookie);
+        }),
     )
     .parse(Deno.args);
 } catch (error) {

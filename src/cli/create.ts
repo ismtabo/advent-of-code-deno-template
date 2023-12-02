@@ -33,6 +33,14 @@ export async function createDay(day: number | undefined) {
     ),
   );
 
+  Deno.writeTextFileSync(
+    join(mainFolder, "mod_test.ts"),
+    await renderFileToString(
+      join(__dirname, "templates/main-mod_test.template"),
+      { day: day },
+    ),
+  );
+
   for (const part of ["partOne", "partTwo"]) {
     ensureDirSync(join(mainFolder, part));
     Deno.writeTextFileSync(
